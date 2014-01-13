@@ -17,25 +17,40 @@ import org.json.JSONObject;
 
 public class Api {
 
-	private static String HOST_NAME = "http://127.0.0.1/sharee";
-	private static String HOST_NAME_API = HOST_NAME + "/api";
+	private static String HOST_NAME = "http://3fc3d50d.ngrok.com/sharee";
+	private static String HOST_NAME_API = HOST_NAME + "/api/v1";
 	private static String NEARBY_PLACES_URL = HOST_NAME_API + "/places/nearby";
 	private static String PLACES_URL = HOST_NAME_API + "/places";
 
-	public static JSONObject getNearbyPlaces(double latitude, double longitude,
-			int type) throws IOException {
+	public static JSONObject getNearbyPlaces(double latitude, double longitude)
+			throws IOException {
 		Map<String, String> params = new java.util.HashMap<String, String>();
-		params.put("latitude", String.valueOf(latitude));
-		params.put("longitude", String.valueOf(longitude));
-		return Api.postHttp(NEARBY_PLACES_URL, params);
+		params.put("lng", "103.87502286911011"); //debug mode
+		params.put("lat", "1.3824658256460714"); //debug mode
+		return Api.getHttp(NEARBY_PLACES_URL, getQueryString(params));
 	}
 
 	public static JSONObject getPlacesDetail(String placesId)
 			throws IOException {
-		return Api.getHttp(PLACES_URL, placesId);
+		return Api.getHttp(PLACES_URL + "/" + placesId, null);
+	}
+	
+	private static String getQueryString(Map<String, String> params){
+		StringBuilder stringBuilder = new StringBuilder();
+		Iterator<Entry<String, String>> iterator = params.entrySet().iterator();
+
+		while (iterator.hasNext()) {
+			Entry<String, String> param = iterator.next();
+			stringBuilder.append(param.getKey()).append('=')
+					.append(param.getValue());
+			if (iterator.hasNext()) {
+				stringBuilder.append('&');
+			}
+		}
+		return stringBuilder.toString();
 	}
 
-	public static JSONObject getHttp(String urlString, String paramVal)
+	public static JSONObject getHttp(String urlString, String queryString)
 			throws IOException {
 
 		// always close connection
@@ -47,8 +62,8 @@ public class Api {
 
 		try {
 
-			if (paramVal != null) {
-				url = new URL(urlString + "/" + paramVal);
+			if (queryString != null) {
+				url = new URL(urlString + "?" + queryString);
 			} else {
 				url = new URL(urlString);
 			}
@@ -123,21 +138,8 @@ public class Api {
 		HttpURLConnection conn = null;
 		JSONObject jsonObject = null;
 
-		// Constructing parameters
-		StringBuilder stringBuilder = new StringBuilder();
-		Iterator<Entry<String, String>> iterator = params.entrySet().iterator();
-
-		while (iterator.hasNext()) {
-			Entry<String, String> param = iterator.next();
-			stringBuilder.append(param.getKey()).append('=')
-					.append(param.getValue());
-			if (iterator.hasNext()) {
-				stringBuilder.append('&');
-			}
-		}
-
 		// data to be sent
-		String paramBody = stringBuilder.toString();
+		String paramBody = getQueryString(params);
 		byte[] paramBytes = paramBody.getBytes();
 
 		Helper.log("body to send: " + paramBody);

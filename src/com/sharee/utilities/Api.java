@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 public class Api {
 
-	private static String HOST_NAME = "http://3fc3d50d.ngrok.com/sharee";
+	private static String HOST_NAME = "http://7f514ec.ngrok.com/sharee";
 	private static String HOST_NAME_API = HOST_NAME + "/api/v1";
 	private static String NEARBY_PLACES_URL = HOST_NAME_API + "/places/nearby";
 	private static String PLACES_URL = HOST_NAME_API + "/places";
@@ -27,6 +27,7 @@ public class Api {
 		Map<String, String> params = new java.util.HashMap<String, String>();
 		params.put("lng", "103.87502286911011"); //debug mode
 		params.put("lat", "1.3824658256460714"); //debug mode
+		params.put("limit", "10");
 		return Api.getHttp(NEARBY_PLACES_URL, getQueryString(params));
 	}
 

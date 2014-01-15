@@ -17,7 +17,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/Theme.HalalSpot" >
         <activity
             android:name="com.sharee.halalspot.activities.MainActivity"
             android:label="@string/app_name" >
@@ -30,6 +30,10 @@
             <meta-data
                 android:name="com.google.android.gms.version"
                 android:value="3.2.65" />
+        </activity>
+        <activity
+            android:name="com.sharee.halalspot.activities.PlaceDetailActivity"
+            android:label="@string/app_name" >
         </activity>
     </application>
 

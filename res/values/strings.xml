@@ -2,12 +2,16 @@
 
     <string name="app_name">Halal Spot</string>
 
-    <string name="sample_places_name">Rumah Makan Sederhana</string>
+    <string name="sample_places_name">Rumah Makan Sederhana EnakBanquet</string>
 
     <string name="sample_places_category">INDONESIAN</string>
 
     <string name="sample_places_distance">2.3km</string>
 
     <string name="fail_to_connect">Fail to connect.</string>
+
+    <string name="get_direction">Get Direction</string>
+
+    <string name="save">Save</string>
 
 </resources>

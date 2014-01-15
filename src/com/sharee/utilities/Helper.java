@@ -26,6 +26,16 @@ import android.widget.Toast;
 public class Helper {
 
 	public static String TAG = "ShareeHalal";
+	public final static String KEY_PLACE_NAME = "placeName";
+	public final static String KEY_PLACE_ADDR = "placeAddr";
+	public final static String KEY_PLACE_CITY = "placeCity";
+	public final static String KEY_PLACE_COUNTRY = "placeCountry";
+	public final static String KEY_PLACE_LAT = "placeLat";
+	public final static String KEY_PLACE_LNG = "placeLng";
+	public final static String KEY_PLACE_CATNAME = "placeCatName";
+	public final static String KEY_PLACE_WEB = "placeWeb";
+	public final static String KEY_PLACE_PHONE = "placePhone";
+	public final static String KEY_PLACE_ID = "placeId";
 
 	public static final void toastShort(Context ctx, String msg) {
 		Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();

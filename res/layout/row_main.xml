@@ -13,7 +13,7 @@
         android:layout_centerVertical="true"
         android:contentDescription="@string/app_name"
         android:scaleType="centerCrop"
-        android:src="@drawable/place_thumb_stub"
+        android:src="@drawable/place_thumb_empty"
          />
 
     <RelativeLayout
@@ -33,6 +33,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sample_places_name"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:textStyle="bold" />
 
         <TextView
@@ -48,11 +50,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
             android:text="@string/sample_places_distance"
             android:textSize="12sp"
             android:textStyle="italic" />
         
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/muis_logo" />
 
 </RelativeLayout>

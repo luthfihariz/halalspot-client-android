@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 public class Api {
 
-	private static String HOST_NAME = "http://7f514ec.ngrok.com/sharee";
+	private static String HOST_NAME = "http://2bde7e32.ngrok.com/sharee";
 	private static String HOST_NAME_API = HOST_NAME + "/api/v1";
 	private static String NEARBY_PLACES_URL = HOST_NAME_API + "/places/nearby";
 	private static String PLACES_URL = HOST_NAME_API + "/places";

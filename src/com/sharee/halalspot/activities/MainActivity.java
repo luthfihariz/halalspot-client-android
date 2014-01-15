@@ -35,7 +35,6 @@ public class MainActivity extends SherlockActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		locClient = new LocationClient(this, this, this);
 		initViews();
 
@@ -59,19 +58,22 @@ public class MainActivity extends SherlockActivity implements
 						nearbyProgress.setVisibility(View.GONE);
 						if (status) {
 							nearbyPlaces = (ArrayList<Place>) objects[0];
-							
-							NearbyListAdapter adapter = new NearbyListAdapter(
-									context, nearbyPlaces);
-							nearbyList.setAdapter(adapter);
-							
-							PauseOnScrollListener pauseListener = new PauseOnScrollListener(
-									ImageLoader.getInstance(), false, true);
-							nearbyList.setOnScrollListener(pauseListener);
+							setUpListView(context, nearbyPlaces);						
 						}
-
 					}
 				});
 		getNearby.execute(loc.getLongitude(), loc.getLatitude());
+	}
+	
+	private void setUpListView(Context context, ArrayList<Place> places){
+		NearbyListAdapter adapter = new NearbyListAdapter(
+				context, nearbyPlaces);
+		nearbyList.setAdapter(adapter);
+		nearbyList.setOnItemClickListener(adapter);
+		
+		PauseOnScrollListener pauseListener = new PauseOnScrollListener(
+				ImageLoader.getInstance(), false, true);
+		nearbyList.setOnScrollListener(pauseListener);
 	}
 
 	@Override
@@ -85,10 +87,8 @@ public class MainActivity extends SherlockActivity implements
 		if (nearbyList.getAdapter() == null || nearbyList.getAdapter().isEmpty()) {
 			loadNearby(currLocation, this);
 		}
-
 		Helper.log("curr location : " + currLocation.getLongitude() + ", "
 				+ currLocation.getLatitude());
-
 	}
 
 	@Override

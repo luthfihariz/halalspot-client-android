@@ -10,18 +10,11 @@
         android:layout_below="@+id/rl_location" >
     </ListView>
 
-    <ProgressBar
-        android:id="@+id/progress_nearby"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
-
     <RelativeLayout
         android:id="@+id/rl_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/map_ph"
+        android:layout_below="@+id/map_nearby"
         android:background="@drawable/selector_dark_btn"
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
@@ -38,12 +31,13 @@
             android:src="@drawable/right_arrow" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/img_gps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_gps" />
+            android:src="@drawable/ic_gps"
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/txt_location"
@@ -51,19 +45,28 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/imageView2"
-            android:text="Current Location"
+            android:layout_toRightOf="@+id/img_gps"
+            android:text="@string/curr_location"
             android:textColor="@android:color/white"
             android:textStyle="bold" />
+
+        <ProgressBar
+            android:id="@+id/progress_nearby"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp" />
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/map_ph"
+    <fragment
+        android:id="@+id/map_nearby"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:scaleType="centerCrop"
         android:src="@drawable/sample_places_img_2" />
 
 </RelativeLayout>

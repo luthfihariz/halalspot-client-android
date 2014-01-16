@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager_place_photos"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="@drawable/placeholder"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
+            android:src="@drawable/sample_places_img" />
+
+        <RelativeLayout
+            android:id="@+id/rl_halal_ins"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-50dp"
+            android:background="@drawable/gradient_trans_black"
+            android:padding="10dp" >
+
+            <ImageView
+                android:id="@+id/img_halal_logo"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/muis_logo" />
+
+            <TextView
+                android:id="@+id/img_halal_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/img_halal_logo"
+                android:contentDescription="@string/app_name"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Majelis Islam Ugama Singapore"
+                android:textColor="#eeeeee" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/right_arrow" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/darker_grey"
+            android:weightSum="1" >
+
+            <Button
+                android:id="@+id/btn_get_direction"
+                style="@style/DarkButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.5"
+                android:text="@string/get_direction" />
+
+            <Button
+                android:id="@+id/btn_save"
+                style="@style/LightButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.5"
+                android:text="@string/save" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_address_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="7dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="7dp" >
+
+            <LinearLayout
+                android:id="@+id/ll_name_addr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/imageView3"
+                android:orientation="vertical"
+                android:paddingRight="10dp" >
+
+                <TextView
+                    android:id="@+id/txt_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Banquet Signature"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:text="RESTAURANT"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/txt_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="#B1- 30 to 33A, Esplanade"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Singapore, Singapore" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/sample_places_img_2" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_name_border"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lighter_grey" />
+
+        <RelativeLayout
+            android:id="@+id/rl_website_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="7dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="7dp"
+            android:paddingTop="7dp"
+            android:visibility="gone" >
+
+            <ImageView
+                android:id="@+id/img_website_icon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_website" />
+
+            <TextView
+                android:id="@+id/txt_website"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/img_website_icon"
+                android:text="www.halalfood.com"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_website_border"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lighter_grey"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/rl_call_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="7dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="7dp"
+            android:paddingTop="7dp"
+            android:visibility="gone" >
+
+            <ImageView
+                android:id="@+id/img_call_icon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_call" />
+
+            <TextView
+                android:id="@+id/txt_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/img_call_icon"
+                android:text="+6563544825"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_call_border"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lighter_grey"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</ScrollView>

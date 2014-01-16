@@ -4,6 +4,19 @@ public class Photo {
 	private String url;
 	private String source;
 
+	public Photo(){
+		
+	}
+	
+	public Photo(String url){
+		this.url = url;
+	}
+	
+	public Photo(String url, String source){
+		this.url = url;
+		this.source = source;
+	}
+	
 	public String getUrl() {
 		return url;
 	}

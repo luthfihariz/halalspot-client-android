@@ -8,7 +8,7 @@
 
     <string name="sample_places_distance">2.3km</string>
 
-    <string name="fail_to_connect">Fail to connect.</string>
+    <string name="fail_to_connect">Sorry, we had trouble while connecting to the server.</string>
 
     <string name="get_direction">Get Direction</string>
 

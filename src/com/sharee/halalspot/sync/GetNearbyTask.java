@@ -7,6 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.os.AsyncTask;
+
 import com.sharee.halalspot.R;
 import com.sharee.halalspot.beans.Category;
 import com.sharee.halalspot.beans.Photo;
@@ -14,9 +17,6 @@ import com.sharee.halalspot.beans.Place;
 import com.sharee.utilities.Api;
 import com.sharee.utilities.Helper;
 import com.sharee.utilities.OnAsyncTaskCompleted;
-
-import android.content.Context;
-import android.os.AsyncTask;
 
 public class GetNearbyTask extends AsyncTask<Double, Void, JSONObject> {
 
@@ -33,27 +33,26 @@ public class GetNearbyTask extends AsyncTask<Double, Void, JSONObject> {
 		try {
 			return Api.getNearbyPlaces(params[1], params[0]);
 		} catch (IOException e) {
+			Helper.log("io err : "+e.getMessage());
 		}
 		return null;
 	}
 
 	@Override
-	protected void onPostExecute(JSONObject response) {
+	protected void onPostExecute(JSONObject response) {		
 		if (response != null) {
 			try {
 				boolean status = response.getBoolean("status");
 				if (status) {
-					listener.onTaskCompleted(true, parseJson(response));
-				} else {
-					listener.onTaskCompleted(false,
-							context.getString(R.string.fail_to_connect));
+					listener.onCompleted(true, parseJson(response));
+					return;
 				}
 			} catch (JSONException e) {
-				Helper.log("json error : "+e.getMessage());
-				listener.onTaskCompleted(false,
-						context.getString(R.string.fail_to_connect));
+				Helper.log("json err : "+e.getMessage());
 			}
 		}
+		listener.onCompleted(false,
+				context.getString(R.string.fail_to_connect));
 	}
 
 	public ArrayList<Place> parseJson(JSONObject response) throws JSONException {
@@ -64,6 +63,7 @@ public class GetNearbyTask extends AsyncTask<Double, Void, JSONObject> {
 		for (int i = 0; i < placesJson.length(); i++) {
 			JSONObject placeJson = placesJson.getJSONObject(i);
 			Place place = new Place();
+			place.setId(placeJson.getJSONObject("_id").getString("$oid"));
 			place.setName(placeJson.getString("name"));
 			place.setDistance(placeJson.getDouble("distance"));
 
@@ -90,7 +90,7 @@ public class GetNearbyTask extends AsyncTask<Double, Void, JSONObject> {
 			category.setName(catJson.getString("name"));
 			category.setShortName(catJson.getString("short_name"));
 			place.setCategory(category);
-			
+
 			JSONArray photosJson = placeJson.getJSONArray("photos");
 			ArrayList<Photo> photos = new ArrayList<Photo>();
 			for (int j = 0; j < photosJson.length(); j++) {
@@ -101,7 +101,7 @@ public class GetNearbyTask extends AsyncTask<Double, Void, JSONObject> {
 				photos.add(photo);
 			}
 			place.setPhotos(photos);
-			
+
 			places.add(place);
 		}
 

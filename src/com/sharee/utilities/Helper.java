@@ -36,6 +36,8 @@ public class Helper {
 	public final static String KEY_PLACE_WEB = "placeWeb";
 	public final static String KEY_PLACE_PHONE = "placePhone";
 	public final static String KEY_PLACE_ID = "placeId";
+	public final static String KEY_PLACE_PHURL = "photoUrl";
+	public final static String KEY_PLACE_PHSRC = "photoSource";
 
 	public static final void toastShort(Context ctx, String msg) {
 		Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();

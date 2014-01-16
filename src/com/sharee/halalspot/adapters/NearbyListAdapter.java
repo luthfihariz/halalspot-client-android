@@ -106,11 +106,6 @@ public class NearbyListAdapter extends BaseAdapter implements
 		intent.putExtra(Helper.KEY_PLACE_PHONE, place.getPhone());
 		intent.putExtra(Helper.KEY_PLACE_LAT, place.getLatitude());
 		intent.putExtra(Helper.KEY_PLACE_LNG, place.getLongitude());
-		if (place.getPhotos().size() > 0) {
-			intent.putExtra("photo", place.getPhotos().get(0).getUrl());
-		}else{
-			intent.putExtra("photo", "");
-		}
 		
 		context.startActivity(intent);
 	}

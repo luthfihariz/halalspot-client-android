@@ -53,7 +53,7 @@ public class MainActivity extends SherlockActivity implements
 
 					@Override
 					@SuppressWarnings("unchecked")
-					public void onTaskCompleted(boolean status,
+					public void onCompleted(boolean status,
 							Object... objects) {
 						nearbyProgress.setVisibility(View.GONE);
 						if (status) {

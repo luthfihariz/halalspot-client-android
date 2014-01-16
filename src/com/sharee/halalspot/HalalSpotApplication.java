@@ -16,9 +16,9 @@ public class HalalSpotApplication extends Application {
 				.cacheInMemory(true)
 				.cacheOnDisc(true)
 				.displayer(new RoundedBitmapDisplayer(10))
-				.showImageOnLoading(R.drawable.place_thumb_empty)
-				.showImageForEmptyUri(R.drawable.place_thumb_empty)
-				.showImageOnFail(R.drawable.place_thumb_stub)
+				.showImageOnLoading(R.drawable.placeholder)
+				.showImageForEmptyUri(R.drawable.placeholder)
+				.showImageOnFail(R.drawable.placeholder)
 				.resetViewBeforeLoading(true)
 				.build();
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(

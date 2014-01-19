@@ -92,18 +92,15 @@
             android:id="@+id/rl_address_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="7dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="7dp" >
+            >
 
             <LinearLayout
                 android:id="@+id/ll_name_addr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/imageView3"
+                android:layout_toLeftOf="@+id/map_place"
                 android:orientation="vertical"
-                android:paddingRight="10dp" >
+                android:padding="10dp" >
 
                 <TextView
                     android:id="@+id/txt_name"
@@ -133,16 +130,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Singapore, Singapore" />
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+            </LinearLayout>            
+            
+            <fragment
+                android:id="@+id/map_place"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/sample_places_img_2" />
+                android:name="com.google.android.gms.maps.SupportMapFragment" />
+            
         </RelativeLayout>
 
         <RelativeLayout

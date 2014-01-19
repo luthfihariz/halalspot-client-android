@@ -16,4 +16,6 @@
 
     <string name="curr_location">Current Location</string>
 
+    <string name="refresh">Refresh</string>
+
 </resources>

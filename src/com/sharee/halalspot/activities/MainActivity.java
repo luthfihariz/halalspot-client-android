@@ -12,12 +12,14 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -39,6 +41,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 	private RelativeLayout locationContainer;
 	private ImageView gpsIcon;
 	private GoogleMap nearbyMap;
+	private Menu optionsMenu;
 
 	private LocationClient locClient;
 	private Location currLocation;
@@ -48,10 +51,15 @@ public class MainActivity extends SherlockFragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		locClient = new LocationClient(this, this, this);
+		setUpLocationClientIfNeeded();
 		initViews();
 		initAction();
+	}
 
+	private void setUpLocationClientIfNeeded() {
+		if (locClient == null) {
+			locClient = new LocationClient(getApplicationContext(), this, this);
+		}
 	}
 
 	private void initViews() {
@@ -81,15 +89,12 @@ public class MainActivity extends SherlockFragmentActivity implements
 		LatLng latLng = new LatLng(loc.getLatitude(), loc.getLongitude());
 		nearbyMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13),
 				2000, null);
-		/*
-		 * MarkerOptions options = new MarkerOptions();
-		 * options.position(currLocation); nearbyMap.addMarker(options);
-		 */
 	}
 
 	private void loadNearby(Location loc, final Context context) {
 		gpsIcon.setVisibility(View.INVISIBLE);
 		nearbyProgress.setVisibility(View.VISIBLE);
+		setRefreshActionButtonState(true);
 		GetNearbyTask getNearby = new GetNearbyTask(this,
 				new OnAsyncTaskCompleted() {
 
@@ -98,13 +103,29 @@ public class MainActivity extends SherlockFragmentActivity implements
 					public void onCompleted(boolean status, Object... objects) {
 						nearbyProgress.setVisibility(View.GONE);
 						gpsIcon.setVisibility(View.VISIBLE);
+						setRefreshActionButtonState(false);
 						if (status) {
 							nearbyPlaces = (ArrayList<Place>) objects[0];
 							setUpListView(context, nearbyPlaces);
+							addMarkerToMap(nearbyPlaces);
 						}
 					}
 				});
 		getNearby.execute(loc.getLongitude(), loc.getLatitude());
+	}
+
+	protected void addMarkerToMap(ArrayList<Place> places) {
+		MarkerOptions options;
+		Place place;
+		LatLng loc;
+		for (int i = 0; i < places.size(); i++) {
+			place = places.get(i);
+			loc = new LatLng(place.getLatitude(), place.getLongitude());
+			options = new MarkerOptions();
+			options.position(loc);
+			nearbyMap.addMarker(options);
+		}
+
 	}
 
 	private void setUpListView(Context context, ArrayList<Place> places) {
@@ -132,6 +153,42 @@ public class MainActivity extends SherlockFragmentActivity implements
 		}
 		Helper.log("curr location : " + currLocation.getLongitude() + ", "
 				+ currLocation.getLatitude());
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.nearby_refresh:
+			if (locClient != null) {
+				loadNearby(locClient.getLastLocation(), MainActivity.this);
+			}
+
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		this.optionsMenu = menu;
+		MenuInflater inflater = getSupportMenuInflater();
+		inflater.inflate(R.menu.nearby_menu, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	public void setRefreshActionButtonState(final boolean refreshing) {
+		if (optionsMenu != null) {
+			final MenuItem refreshItem = optionsMenu
+					.findItem(R.id.nearby_refresh);
+			if (refreshItem != null) {
+				if (refreshing) {
+					refreshItem
+							.setActionView(R.layout.actionbar_indeterminate_progress);
+				} else {
+					refreshItem.setActionView(null);
+				}
+			}
+		}
 	}
 
 	@Override

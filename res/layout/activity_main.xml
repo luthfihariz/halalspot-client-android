@@ -21,19 +21,20 @@
         android:paddingRight="5dp"
         android:paddingTop="5dp" >
 
-        <ImageView
-            android:id="@+id/pager_place_photos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
-            android:src="@drawable/right_arrow" />
+<!--         <ImageView -->
+<!--             android:id="@+id/pager_place_photos" -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:layout_alignParentRight="true" -->
+<!--             android:layout_centerVertical="true" -->
+<!--             android:layout_marginRight="5dp" -->
+<!--             android:src="@drawable/right_arrow" /> -->
 
         <ImageView
             android:id="@+id/img_gps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/app_name"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_gps"

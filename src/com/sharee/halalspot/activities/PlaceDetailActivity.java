@@ -3,6 +3,7 @@ package com.sharee.halalspot.activities;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
@@ -166,34 +167,46 @@ public class PlaceDetailActivity extends SherlockFragmentActivity {
 			placeWeb.setText(place.getWebsite());
 			webContainer.setVisibility(View.VISIBLE);
 			webBorder.setVisibility(View.VISIBLE);
-			setWebsiteListener();
+			
+			String url = place.getWebsite();
+			if (!url.startsWith("http://") && !url.startsWith("https://")){
+				url = "http://" + url;
+			}
+			setWebsiteListener(url);
 		}
 		if (!place.getPhone().equals("")) {
 			placePhone.setText(place.getPhone());
 			callContainer.setVisibility(View.VISIBLE);
 			callBorder.setVisibility(View.VISIBLE);
-			setCallListener();
+			setCallListener(place.getPhone());
 		}
 	}
 
-	private void setCallListener() {
+	private void setCallListener(final String phoneNumber) {
 		callContainer.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
+				try {
+					Intent callIntent = new Intent(Intent.ACTION_DIAL);
+					callIntent.setData(Uri.parse(phoneNumber));
+					startActivity(callIntent);
+				} catch (ActivityNotFoundException ex) {
+				}
 			}
 		});
 	}
 
-	private void setWebsiteListener() {
+	private void setWebsiteListener(final String url) {
 		webContainer.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
+				Helper.log("url : "+url);
+				
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				intent.setData(Uri.parse(url));
+				startActivity(intent);						
 			}
 		});
 	}

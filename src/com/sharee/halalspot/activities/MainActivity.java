@@ -3,9 +3,13 @@ package com.sharee.halalspot.activities;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -42,18 +46,20 @@ public class MainActivity extends SherlockFragmentActivity implements
 	private ImageView gpsIcon;
 	private GoogleMap nearbyMap;
 	private Menu optionsMenu;
-
 	private LocationClient locClient;
 	private Location currLocation;
 
 	private ArrayList<Place> nearbyPlaces;
+	private boolean isLoading;
+	private NearbyListAdapter adapter;
+	private View footerView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setUpLocationClientIfNeeded();
 		initViews();
-		initAction();
+		initAction(this);
 	}
 
 	private void setUpLocationClientIfNeeded() {
@@ -74,12 +80,15 @@ public class MainActivity extends SherlockFragmentActivity implements
 		nearbyMap.getUiSettings().setCompassEnabled(false);
 	}
 
-	private void initAction() {
+	private void initAction(final Context ctx) {
 		locationContainer.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				Helper.log("clicked");
+				Intent intent = new Intent(ctx, SearchByCityActivity.class);
+				intent.putExtra(Helper.KEY_PLACE_LAT, currLocation.getLatitude());
+				intent.putExtra(Helper.KEY_PLACE_LNG, currLocation.getLongitude());
+				startActivity(intent);
 			}
 		});
 	}
@@ -91,7 +100,9 @@ public class MainActivity extends SherlockFragmentActivity implements
 				2000, null);
 	}
 
-	private void loadNearby(Location loc, final Context context) {
+	private void loadNearby(Location loc, final Context context,
+			final boolean refresh, int skip) {
+		isLoading = true;
 		gpsIcon.setVisibility(View.INVISIBLE);
 		nearbyProgress.setVisibility(View.VISIBLE);
 		setRefreshActionButtonState(true);
@@ -104,13 +115,14 @@ public class MainActivity extends SherlockFragmentActivity implements
 						nearbyProgress.setVisibility(View.GONE);
 						gpsIcon.setVisibility(View.VISIBLE);
 						setRefreshActionButtonState(false);
+						isLoading = false;
 						if (status) {
 							nearbyPlaces = (ArrayList<Place>) objects[0];
-							setUpListView(context, nearbyPlaces);
+							setUpListView(context, nearbyPlaces, refresh);
 							addMarkerToMap(nearbyPlaces);
 						}
 					}
-				});
+				}, skip);
 		getNearby.execute(loc.getLongitude(), loc.getLatitude());
 	}
 
@@ -128,14 +140,51 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 	}
 
-	private void setUpListView(Context context, ArrayList<Place> places) {
-		NearbyListAdapter adapter = new NearbyListAdapter(context, nearbyPlaces);
-		nearbyList.setAdapter(adapter);
-		nearbyList.setOnItemClickListener(adapter);
+	private void setUpListView(final Context context, ArrayList<Place> places,
+			boolean refresh) {
+		
+		if (adapter == null || refresh) {
+			footerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+					.inflate(R.layout.load_more_view, null, false);
+			if(!refresh) nearbyList.addFooterView(footerView);
 
-		PauseOnScrollListener pauseListener = new PauseOnScrollListener(
-				ImageLoader.getInstance(), false, true);
-		nearbyList.setOnScrollListener(pauseListener);
+			adapter = new NearbyListAdapter(context, nearbyPlaces);
+			nearbyList.setAdapter(adapter);
+			nearbyList.setOnItemClickListener(adapter);
+
+			OnScrollListener loadMoreListener = new OnScrollListener() {
+				@Override
+				public void onScrollStateChanged(AbsListView arg0, int arg1) {
+				}
+
+				@Override
+				public void onScroll(AbsListView view, int firstVisibleItem,
+						int visibleItemCount, int totalItemCount) {
+					Helper.log("total item count : " + totalItemCount);
+					int lastInScreen = firstVisibleItem + visibleItemCount;
+					if ((totalItemCount == lastInScreen) && !isLoading) {
+						loadNearby(currLocation, context, false, totalItemCount-1);
+					}
+				}
+			};
+
+			PauseOnScrollListener pauseListenerWithLoadMore = new PauseOnScrollListener(
+					ImageLoader.getInstance(), false, true, loadMoreListener);
+			nearbyList.setOnScrollListener(pauseListenerWithLoadMore);
+		} else {
+			for (int i = 0; i < places.size(); i++) {
+				adapter.add(places.get(i));
+			}
+
+			// server returning zero, remove footer view & load more listener
+			if (places.size() < 10) {
+				Helper.log("places size : "+places.size());				
+				footerView.setVisibility(View.GONE);				
+				PauseOnScrollListener pauseListener = new PauseOnScrollListener(
+						ImageLoader.getInstance(), false, true);
+				nearbyList.setOnScrollListener(pauseListener);
+			}
+		}
 	}
 
 	@Override
@@ -149,7 +198,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		initMap(currLocation);
 		if (nearbyList.getAdapter() == null
 				|| nearbyList.getAdapter().isEmpty()) {
-			loadNearby(currLocation, this);
+			loadNearby(currLocation, this, false, 0);
 		}
 		Helper.log("curr location : " + currLocation.getLongitude() + ", "
 				+ currLocation.getLatitude());
@@ -160,7 +209,8 @@ public class MainActivity extends SherlockFragmentActivity implements
 		switch (item.getItemId()) {
 		case R.id.nearby_refresh:
 			if (locClient != null) {
-				loadNearby(locClient.getLastLocation(), MainActivity.this);
+				loadNearby(locClient.getLastLocation(), MainActivity.this,
+						true, 0);
 			}
 
 			return true;

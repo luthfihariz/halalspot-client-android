@@ -162,8 +162,11 @@ public class Place {
 	}
 
 	public String getFormattedDistance() {
-		DecimalFormat decimal = new DecimalFormat("##.##");
-		return decimal.format(distance)+" km";
+		if(distance > 0.0){
+			DecimalFormat decimal = new DecimalFormat("##.##");
+			return decimal.format(distance)+" km";
+		}
+		return null;
 	}
 	
 	public double getDistance(){

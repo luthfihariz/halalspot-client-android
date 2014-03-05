@@ -12,6 +12,8 @@ import android.os.AsyncTask;
 
 import com.sharee.halalspot.R;
 import com.sharee.halalspot.beans.Category;
+import com.sharee.halalspot.beans.Halal;
+import com.sharee.halalspot.beans.HalalBodies;
 import com.sharee.halalspot.beans.Photo;
 import com.sharee.halalspot.beans.Place;
 import com.sharee.utilities.Api;
@@ -22,24 +24,41 @@ public class GetNearbyTask extends AsyncTask<Double, Void, JSONObject> {
 
 	private Context context;
 	private OnAsyncTaskCompleted listener;
+	private int skip;
+	private String city;
 
-	public GetNearbyTask(Context context, OnAsyncTaskCompleted listener) {
+	public GetNearbyTask(Context context, OnAsyncTaskCompleted listener,
+			int skip, String city) {
 		this.context = context;
 		this.listener = listener;
+		this.skip = skip;
+		this.city = city;
+	}
+
+	public GetNearbyTask(Context context, OnAsyncTaskCompleted listener,
+			int skip) {
+		this.context = context;
+		this.listener = listener;
+		this.skip = skip;
 	}
 
 	@Override
 	protected JSONObject doInBackground(Double... params) {
 		try {
-			return Api.getNearbyPlaces(params[1], params[0]);
+			if (city != null) {
+				return Api.getNearbyPlaces(skip, city);
+			} else {
+				return Api.getNearbyPlaces(params[1], params[0], skip);
+			}
+
 		} catch (IOException e) {
-			Helper.log("io err : "+e.getMessage());
+			Helper.log("io err : " + e.getMessage());
 		}
 		return null;
 	}
 
 	@Override
-	protected void onPostExecute(JSONObject response) {		
+	protected void onPostExecute(JSONObject response) {
 		if (response != null) {
 			try {
 				boolean status = response.getBoolean("status");
@@ -48,11 +67,10 @@ public class GetNearbyTask extends AsyncTask<Double, Void, JSONObject> {
 					return;
 				}
 			} catch (JSONException e) {
-				Helper.log("json err : "+e.getMessage());
+				Helper.log("json err : " + e.getMessage());
 			}
 		}
-		listener.onCompleted(false,
-				context.getString(R.string.fail_to_connect));
+		listener.onCompleted(false, context.getString(R.string.fail_to_connect));
 	}
 
 	public ArrayList<Place> parseJson(JSONObject response) throws JSONException {
@@ -65,7 +83,8 @@ public class GetNearbyTask extends AsyncTask<Double, Void, JSONObject> {
 			Place place = new Place();
 			place.setId(placeJson.getJSONObject("_id").getString("$oid"));
 			place.setName(placeJson.getString("name"));
-			place.setDistance(placeJson.getDouble("distance"));
+			if (city == null)
+				place.setDistance(placeJson.getDouble("distance"));
 
 			JSONObject locJson = placeJson.getJSONObject("location");
 			place.setAddress(locJson.getString("address"));
@@ -91,6 +110,25 @@ public class GetNearbyTask extends AsyncTask<Double, Void, JSONObject> {
 			category.setShortName(catJson.getString("short_name"));
 			place.setCategory(category);
 
+			JSONObject halalJson = placeJson.getJSONObject("halal");
+			Halal halal = new Halal();
+			halal.setType(halalJson.getInt("type"));
+			halal.setDisplayValue(halalJson.getString("displayValue"));
+			halal.setDescription(halalJson.getString("description"));
+
+			try {
+				JSONObject bodiesJson = halalJson.getJSONObject("bodies");
+				HalalBodies bodies = new HalalBodies();
+				bodies.setName(bodiesJson.getString("name"));
+				bodies.setShortName(bodiesJson.getString("shortName"));
+				bodies.setCountry(bodiesJson.getString("country"));
+				bodies.setLogoUrl("https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTWXfzteQGyIdc_NIuLa9OoAmuzVWQ1iZhs-13ZosM-VM1l20IwWg");
+				halal.setBodies(bodies);
+			} catch (JSONException e) {
+			}
+
+			place.setHalal(halal);
+
 			JSONArray photosJson = placeJson.getJSONArray("photos");
 			ArrayList<Photo> photos = new ArrayList<Photo>();
 			for (int j = 0; j < photosJson.length(); j++) {
@@ -101,7 +139,6 @@ public class GetNearbyTask extends AsyncTask<Double, Void, JSONObject> {
 				photos.add(photo);
 			}
 			place.setPhotos(photos);
-
 			places.add(place);
 		}
 

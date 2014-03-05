@@ -1,4 +1,3 @@
-
 package com.sharee.utilities;
 
 import java.io.BufferedReader;
@@ -13,33 +12,59 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Api {
 
-	private static String HOST_NAME = "http://55146b4f.ngrok.com/sharee";
+	private static String DOMAIN = "http://4f190343.ngrok.com";
+	private static String HOST_NAME = DOMAIN + "/sharee";
 	private static String HOST_NAME_API = HOST_NAME + "/api/v1";
 	private static String NEARBY_PLACES_URL = HOST_NAME_API + "/places/nearby";
 	private static String PLACES_URL = HOST_NAME_API + "/places";
+	private static String AUTOCOMPLETE_CITY_URL = "http://gd.geobytes.com/AutoCompleteCity";
 
-	public static JSONObject getNearbyPlaces(double latitude, double longitude)
-			throws IOException {
+	public static JSONObject getNearbyPlaces(double latitude, double longitude,
+			int skip) throws IOException {
 		Map<String, String> params = new java.util.HashMap<String, String>();
-		//params.put("lng", "103.87502286911011"); //debug mode
-		//params.put("lat", "1.3824658256460714"); //debug mode
-		params.put("lng", String.valueOf(longitude));
-		params.put("lat", String.valueOf(latitude));
-		params.put("limit", "10");
+		params.put("lng", "103.76483917236328"); // debug mode
+		params.put("lat", "1.314939447746537"); // debug mode
+		params.put("limit", String.valueOf(10 + skip));
+		params.put("skip", String.valueOf(skip));
+
+		/*
+		 * params.put("lng", String.valueOf(longitude)); params.put("lat",
+		 * String.valueOf(latitude));
+		 */
+
 		return Api.getHttp(NEARBY_PLACES_URL, getQueryString(params));
+	}
+	
+	public static JSONObject getNearbyPlaces(int skip, String city) throws IOException {
+		Map<String, String> params = new java.util.HashMap<String, String>();
+		
+		params.put("limit", String.valueOf(30 + skip));
+		params.put("skip", String.valueOf(skip));
+		params.put("city", city);
+		params.put("minified", "false");
+
+		return Api.getHttp(PLACES_URL, getQueryString(params));
 	}
 
 	public static JSONObject getPlacesDetail(String placesId)
 			throws IOException {
 		return Api.getHttp(PLACES_URL + "/" + placesId, null);
 	}
-	
-	private static String getQueryString(Map<String, String> params){
+
+	public static JSONArray autoCompleteCity(String keyword)
+			throws IOException {
+		Map<String, String> params = new java.util.HashMap<String, String>();
+		params.put("q", keyword);
+		return Api.getHttpJsonArray(AUTOCOMPLETE_CITY_URL, getQueryString(params));
+	}
+
+	private static String getQueryString(Map<String, String> params) {
 		StringBuilder stringBuilder = new StringBuilder();
 		Iterator<Entry<String, String>> iterator = params.entrySet().iterator();
 
@@ -104,8 +129,8 @@ public class Api {
 
 				Helper.log("json response: " + json);
 
-				// convert String to JSON object
 				jsonObject = new JSONObject(json);
+
 			} else {
 				InputStream es = conn.getErrorStream();
 				BufferedReader reader = new BufferedReader(
@@ -130,6 +155,84 @@ public class Api {
 		}
 
 		return jsonObject;
+	}
+
+	public static JSONArray getHttpJsonArray(String urlString,
+			String queryString) throws IOException {
+
+		// always close connection
+		System.setProperty("http.keepAlive", "false");// to fix EOFException
+
+		URL url = null;
+		HttpURLConnection conn = null;
+		JSONArray jsonArr = null;
+
+		try {
+
+			if (queryString != null) {
+				url = new URL(urlString + "?" + queryString);
+			} else {
+				url = new URL(urlString);
+			}
+
+			Helper.log("get url: " + url);
+
+		} catch (MalformedURLException e) {
+			Helper.log("invalid url " + e.getLocalizedMessage());
+		}
+
+		try {
+
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestProperty("Content-Type",
+					"application/x-www-form-urlencoded;charset=UTF-8");
+
+			// handle the response
+			int status = conn.getResponseCode();
+
+			if (status == 200)// status OK
+			{
+				InputStream is = conn.getInputStream();
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(is, "iso-8859-1"), 8);
+				String line = null;
+				StringBuilder sb = new StringBuilder();
+
+				while ((line = reader.readLine()) != null) {
+					sb.append(line + "\n");
+				}
+				is.close();
+
+				String json = sb.toString();
+
+				Helper.log("json response: " + json);
+
+				jsonArr = new JSONArray(json);
+
+			} else {
+				InputStream es = conn.getErrorStream();
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(es));
+				String line = null;
+
+				while ((line = reader.readLine()) != null) {
+					Helper.log("error: " + line);
+				}
+				es.close();
+
+				throw new IOException(
+						"[Server Util] Request failed with error code: "
+								+ status);
+			}
+
+		} catch (JSONException e) {
+			Helper.log("JSON Exception: " + e.getLocalizedMessage());
+		} finally {
+			conn.disconnect();
+			Helper.log("connection disconnect");
+		}
+
+		return jsonArr;
 	}
 
 	public static JSONObject postHttp(String urlString,

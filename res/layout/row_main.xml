@@ -22,10 +22,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/img_nearby"
         android:layout_alignTop="@+id/img_nearby"
-        android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp"
+        android:layout_toLeftOf="@+id/img_nearby_halal_logo"
         android:layout_toRightOf="@+id/img_nearby" >
 
         <TextView
@@ -49,20 +49,25 @@
             android:id="@+id/txt_nearby_dist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_nearby_category"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
             android:text="@string/sample_places_distance"
             android:textSize="12sp"
-            android:textStyle="italic" />
+             />
         
     </RelativeLayout>
 
     <ImageView
-        android:id="@+id/pager_place_photos"
+        android:id="@+id/img_nearby_halal_logo"
         android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_height="30dp" 
+        android:scaleType="fitXY"
+        android:src="@drawable/sample_halal_ins_logo"
+        android:layout_marginLeft="5dp"
+        android:contentDescription="@string/app_name"   
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/muis_logo" />
+        
+        />
 
 </RelativeLayout>

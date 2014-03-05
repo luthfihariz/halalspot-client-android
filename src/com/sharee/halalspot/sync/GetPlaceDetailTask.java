@@ -12,6 +12,8 @@ import android.os.AsyncTask;
 
 import com.sharee.halalspot.R;
 import com.sharee.halalspot.beans.Category;
+import com.sharee.halalspot.beans.Halal;
+import com.sharee.halalspot.beans.HalalBodies;
 import com.sharee.halalspot.beans.Photo;
 import com.sharee.halalspot.beans.Place;
 import com.sharee.utilities.Api;
@@ -39,7 +41,7 @@ public class GetPlaceDetailTask extends AsyncTask<String, Void, JSONObject> {
 	}
 
 	@Override
-	protected void onPostExecute(JSONObject response) {		
+	protected void onPostExecute(JSONObject response) {
 		if (response != null) {
 			try {
 				boolean status = response.getBoolean("status");
@@ -48,18 +50,17 @@ public class GetPlaceDetailTask extends AsyncTask<String, Void, JSONObject> {
 					return;
 				}
 			} catch (JSONException e) {
-				Helper.log("err : "+e.getMessage());				
+				Helper.log("err : " + e.getMessage());
 			}
-		}		
-		listener.onCompleted(false,
-				context.getString(R.string.fail_to_connect));
+		}
+		listener.onCompleted(false, context.getString(R.string.fail_to_connect));
 	}
 
 	private Place parseJson(JSONObject response) throws JSONException {
 		Place place = new Place();
 		JSONObject placeJson = response.getJSONObject("result").getJSONObject(
 				"place");
-		place.setName(placeJson.getString("name"));		
+		place.setName(placeJson.getString("name"));
 
 		JSONObject locJson = placeJson.getJSONObject("location");
 		place.setAddress(locJson.getString("address"));
@@ -84,6 +85,33 @@ public class GetPlaceDetailTask extends AsyncTask<String, Void, JSONObject> {
 		category.setName(catJson.getString("name"));
 		category.setShortName(catJson.getString("short_name"));
 		place.setCategory(category);
+
+		JSONObject halalJson = placeJson.getJSONObject("halal");
+		Halal halal = new Halal();
+		halal.setType(halalJson.getInt("type"));
+		halal.setDisplayValue(halalJson.getString("displayValue"));
+		halal.setDescription(halalJson.getString("description"));
+
+		try {
+			JSONObject bodiesJson = halalJson.getJSONObject("bodies");
+			HalalBodies bodies = new HalalBodies();
+			bodies.setName(bodiesJson.getString("name"));
+			bodies.setShortName(bodiesJson.getString("shortName"));
+			bodies.setCountry(bodiesJson.getString("country"));
+			bodies.setOverview(bodiesJson.getString("overview"));
+			bodies.setLogoUrl("https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTWXfzteQGyIdc_NIuLa9OoAmuzVWQ1iZhs-13ZosM-VM1l20IwWg");
+			
+			JSONObject contactBodiesJson = bodiesJson.getJSONObject("contact");
+			bodies.setAddress(contactBodiesJson.getString("address"));
+			bodies.setWebsite(contactBodiesJson.getString("website"));
+			bodies.setPhone(contactBodiesJson.getString("phone"));
+			bodies.setEmail(contactBodiesJson.getString("email"));
+			
+			halal.setBodies(bodies);
+		} catch (JSONException e) {
+		}
+
+		place.setHalal(halal);
 
 		JSONArray photosJson = placeJson.getJSONArray("photos");
 		ArrayList<Photo> photos = new ArrayList<Photo>();

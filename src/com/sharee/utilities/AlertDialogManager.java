@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.Html;
+import android.view.View;
 
 public class AlertDialogManager {
 
@@ -39,6 +40,16 @@ public class AlertDialogManager {
 				positiveButtonListener);
 		alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Nope",
 				negativeButtonListener);
+		alertDialog.show();
+	}
+	
+	public void showDialog(Context context, String title, String message, View customView,
+			DialogInterface.OnClickListener positiveButtonListener) {
+		AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+		alertDialog.setTitle(title);
+		alertDialog.setMessage(Html.fromHtml(message));
+		alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK",
+				positiveButtonListener);		
 		alertDialog.show();
 	}
 }

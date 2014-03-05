@@ -5,7 +5,18 @@ public class Halal {
 	private int type;
 	private String displayValue;
 	private String description;
-	private HalalInstitution institution;
+	private HalalBodies bodies;
+	
+	public static final int UNVERIFIED = 1;
+	public static final int VERBAL_ASSURANCE = 2;
+	public static final int LABELED_MENU = 3;
+	public static final int MUSLIM_OWNERS = 4;
+	public static final int HALAL_WINDOW_SIGN = 5;
+	public static final int HALAL_CERTIFICATED = 6;
+	public static final int GOVERNMENT = 7;
+	public static final int ISLAMIC = 8;
+	
+	public static final String KEY_HALAL_DISPLAY = "halalDisplay";	
 
 	public int getType() {
 		return type;
@@ -31,12 +42,12 @@ public class Halal {
 		this.description = description;
 	}
 
-	public HalalInstitution getInstitution() {
-		return institution;
+	public HalalBodies getBodies() {
+		return bodies;
 	}
 
-	public void setInstitution(HalalInstitution institution) {
-		this.institution = institution;
+	public void setBodies(HalalBodies bodies) {
+		this.bodies = bodies;
 	}
 
 }

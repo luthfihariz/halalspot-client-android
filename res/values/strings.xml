@@ -1,21 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">Halal Spot</string>
-
-    <string name="sample_places_name">Rumah Makan Sederhana EnakBanquet</string>
-
+    <string name="sample_places_name">KFC</string>
     <string name="sample_places_category">INDONESIAN</string>
-
     <string name="sample_places_distance">2.3km</string>
-
     <string name="fail_to_connect">Sorry, we had trouble while connecting to the server.</string>
-
     <string name="get_direction">Get Direction</string>
-
     <string name="save">Save</string>
-
     <string name="curr_location">Current Location</string>
-
     <string name="refresh">Refresh</string>
+    <string name="sample_muis">Majelis Islam Ugama Singapore</string>
+    <string name="sample_muis_addr">Chief Executive Islamic Religious of Singapore (MUIS) Singapore Islamic Hub, 273 Braddel Road, Singapore 579702</string>
+    <string name="sample_overview"><![CDATA[The Majlis Ugama Islam Singapura (MUIS), also known as the Islamic Religious Council of Singapore, was established as a statutory body in 1968 when the Administration of Muslim Law Act (AMLA) came into effect. Under AMLA, MUIS is to advise the President of Singapore on all matters relating to Islam in Singapore.<br/><br/> The role of MUIS is to see that the many and varied interests of Singapore\'s Muslim community are looked after. In this regard MUIS is responsible for the promotion of religious, social, educational, economic and cultural activities in accordance with the principles and traditions of Islam as enshrined in the Holy Quran and Sunnah.]]></string>
+    <string name="load_more_nearbies">More nearbies..</string>
+    <string name="title_activity_full_map">Nearby</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

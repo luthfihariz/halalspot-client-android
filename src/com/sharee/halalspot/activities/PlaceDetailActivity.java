@@ -12,12 +12,14 @@ import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,6 +28,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sharee.halalspot.R;
 import com.sharee.halalspot.adapters.PhotoPagerAdapter;
+import com.sharee.halalspot.beans.Halal;
+import com.sharee.halalspot.beans.HalalBodies;
 import com.sharee.halalspot.beans.Photo;
 import com.sharee.halalspot.beans.Place;
 import com.sharee.halalspot.sync.GetPlaceDetailTask;
@@ -36,31 +40,30 @@ public class PlaceDetailActivity extends SherlockFragmentActivity {
 
 	private Intent intent;
 	private Button getDirectionBtn;
-	private Button saveBtn;
+	private ImageView halalLogo;
 	private TextView placeName;
 	private TextView placeCat;
 	private TextView placeAddr;
 	private TextView placeWeb;
 	private TextView placePhone;
 	private TextView placeCity;
+	private TextView placeHalal;
 	private ViewPager photosPager;
 	private ScrollView scrollView;
 	private RelativeLayout webContainer;
 	private RelativeLayout webBorder;
 	private RelativeLayout callContainer;
 	private RelativeLayout callBorder;
+	private RelativeLayout bodiesContainer;
 	private GoogleMap placeMap;
 
 	private double latitude;
-	private double longitude;
-	private double userLatitude;
-	private double userLongitude;
+	private double longitude;	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		intent = getIntent();
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		intent = getIntent();		
 		initView();
 		initBackgroundTask();
 		initMap();
@@ -68,33 +71,44 @@ public class PlaceDetailActivity extends SherlockFragmentActivity {
 	}
 
 	private void initView() {
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_place_detail);
 		setSupportProgressBarIndeterminateVisibility(true);
-
+		
+		scrollView = (ScrollView) findViewById(R.id.scroll_container);
 		getDirectionBtn = (Button) findViewById(R.id.btn_get_direction);
-		saveBtn = (Button) findViewById(R.id.btn_save);
+		halalLogo = (ImageView) findViewById(R.id.img_halal_logo);
 		placeName = (TextView) findViewById(R.id.txt_name);
 		placeAddr = (TextView) findViewById(R.id.txt_address);
 		placeCat = (TextView) findViewById(R.id.txt_category);
 		placePhone = (TextView) findViewById(R.id.txt_call);
 		placeWeb = (TextView) findViewById(R.id.txt_website);
 		placeCity = (TextView) findViewById(R.id.txt_city);
-		photosPager = (ViewPager) findViewById(R.id.pager_place_photos);
-		scrollView = (ScrollView) findViewById(R.id.scroll_container);
+		placeHalal = (TextView) findViewById(R.id.txt_halal_value);
+		photosPager = (ViewPager) findViewById(R.id.pager_place_photos);		
+		bodiesContainer = (RelativeLayout) findViewById(R.id.rl_halal_bodies);
 		webContainer = (RelativeLayout) findViewById(R.id.rl_website_container);
 		webBorder = (RelativeLayout) findViewById(R.id.rl_website_border);
 		callContainer = (RelativeLayout) findViewById(R.id.rl_call_container);
 		callBorder = (RelativeLayout) findViewById(R.id.rl_call_border);
 
 		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);		
 		actionBar.setTitle(intent.getStringExtra(Helper.KEY_PLACE_NAME));
 		actionBar.setSubtitle(intent.getStringExtra(Helper.KEY_PLACE_CATNAME));
+		
+		/*String halalLogoUrl = intent.getStringExtra(HalalBodies.KEY_BODY_LOGOURL);
+		ImageLoader.getInstance().displayImage(halalLogoUrl, halalLogo);*/
+		
 		placeName.setText(intent.getStringExtra(Helper.KEY_PLACE_NAME));
 		placeAddr.setText(intent.getStringExtra(Helper.KEY_PLACE_ADDR));
 		placeCat.setText(intent.getStringExtra(Helper.KEY_PLACE_CATNAME)
 				.toUpperCase(Locale.getDefault()));
 		placeCity.setText(intent.getStringExtra(Helper.KEY_PLACE_CITY) + ", "
 				+ intent.getStringExtra(Helper.KEY_PLACE_COUNTRY));
+		/*placeHalal.setText(intent.getStringExtra(HalalBodies.KEY_BODY_NAME));*/
+		
+		
 	}
 
 	private void initAction() {
@@ -109,15 +123,6 @@ public class PlaceDetailActivity extends SherlockFragmentActivity {
 						"com.google.android.apps.maps",
 						"com.google.android.maps.MapsActivity"));
 				startActivity(intent);
-			}
-		});
-
-		saveBtn.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-
 			}
 		});
 
@@ -138,11 +143,19 @@ public class PlaceDetailActivity extends SherlockFragmentActivity {
 		options.position(latLng);
 		placeMap.addMarker(options);
 		placeMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+		
+		placeMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+			
+			@Override
+			public void onMapClick(LatLng arg0) {
+				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:"+latitude+","+longitude));
+				startActivity(intent);
+			}
+		});
 	}
 
 	private void initBackgroundTask() {
 		String placeId = intent.getStringExtra(Helper.KEY_PLACE_ID);
-		Helper.log(placeId);
 		GetPlaceDetailTask getPlaceDetail = new GetPlaceDetailTask(this,
 				new OnAsyncTaskCompleted() {
 
@@ -159,6 +172,7 @@ public class PlaceDetailActivity extends SherlockFragmentActivity {
 					}
 				});
 		getPlaceDetail.execute(placeId);
+		Helper.log(placeId);
 	}
 
 	private void updateViewAfterGetDetail(Place place) {
@@ -180,6 +194,29 @@ public class PlaceDetailActivity extends SherlockFragmentActivity {
 			callBorder.setVisibility(View.VISIBLE);
 			setCallListener(place.getPhone());
 		}
+						
+		setBodiesListener(place.getHalal());
+	}
+
+	private void setBodiesListener(final Halal halal) {
+		bodiesContainer.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				Helper.log("addr before intent : "+halal.getBodies().getAddress());
+				Intent intent = new  Intent();
+				intent.setClass(PlaceDetailActivity.this, HalalBodiesActivity.class);
+				intent.putExtra(HalalBodies.KEY_BODY_NAME, halal.getBodies().getName());
+				intent.putExtra(HalalBodies.KEY_BODY_SHORTNAME, halal.getBodies().getShortName());
+				intent.putExtra(HalalBodies.KEY_BODY_OVERVIEW, halal.getBodies().getOverview());
+				intent.putExtra(HalalBodies.KEY_BODY_ADDRESS, halal.getBodies().getAddress());
+				intent.putExtra(HalalBodies.KEY_BODY_COUNTRY, halal.getBodies().getCountry());
+				intent.putExtra(HalalBodies.KEY_BODY_PHONE, halal.getBodies().getPhone());
+				intent.putExtra(HalalBodies.KEY_BODY_WEBSITE, halal.getBodies().getWebsite());
+				intent.putExtra(HalalBodies.KEY_BODY_EMAIL, halal.getBodies().getEmail());
+				startActivity(intent);
+			}
+		});
 	}
 
 	private void setCallListener(final String phoneNumber) {
@@ -192,6 +229,7 @@ public class PlaceDetailActivity extends SherlockFragmentActivity {
 					callIntent.setData(Uri.parse(phoneNumber));
 					startActivity(callIntent);
 				} catch (ActivityNotFoundException ex) {
+					Helper.log("err : "+ex.getMessage());
 				}
 			}
 		});
@@ -223,5 +261,15 @@ public class PlaceDetailActivity extends SherlockFragmentActivity {
 				return false;
 			}
 		});
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			super.finish();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }

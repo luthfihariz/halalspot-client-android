@@ -19,7 +19,7 @@
             android:src="@drawable/sample_places_img" />
 
         <RelativeLayout
-            android:id="@+id/rl_halal_ins"
+            android:id="@+id/rl_halal_bodies"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="-50dp"
@@ -34,7 +34,7 @@
                 android:src="@drawable/muis_logo" />
 
             <TextView
-                android:id="@+id/img_halal_value"
+                android:id="@+id/txt_halal_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -43,7 +43,7 @@
                 android:contentDescription="@string/app_name"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="Majelis Islam Ugama Singapore"
+                android:text="@string/sample_muis"
                 android:textColor="#eeeeee" />
 
             <ImageView
@@ -74,18 +74,6 @@
                 android:layout_marginTop="10dp"
                 android:layout_weight="0.5"
                 android:text="@string/get_direction" />
-
-            <Button
-                android:id="@+id/btn_save"
-                style="@style/LightButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_weight="0.5"
-                android:text="@string/save" />
         </LinearLayout>
 
         <RelativeLayout

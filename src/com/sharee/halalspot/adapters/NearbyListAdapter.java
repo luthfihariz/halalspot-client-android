@@ -1,6 +1,7 @@
 package com.sharee.halalspot.adapters;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,8 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sharee.halalspot.R;
 import com.sharee.halalspot.activities.PlaceDetailActivity;
+import com.sharee.halalspot.beans.Halal;
+import com.sharee.halalspot.beans.HalalBodies;
 import com.sharee.halalspot.beans.Place;
 import com.sharee.utilities.Helper;
 
@@ -36,6 +39,11 @@ public class NearbyListAdapter extends BaseAdapter implements
 		this.context = context;
 	}
 
+	public void add(Place place) {
+		places.add(place);
+		this.notifyDataSetChanged();
+	}
+	
 	@Override
 	public int getCount() {
 		return places.size();
@@ -58,6 +66,8 @@ public class NearbyListAdapter extends BaseAdapter implements
 			holder = new ViewHolder();
 			v = inflater.inflate(R.layout.row_main, null);
 			holder.nearbyPlaceImg = (ImageView) v.findViewById(R.id.img_nearby);
+			holder.nearbyHalalBodiesLogo = (ImageView) v
+					.findViewById(R.id.img_nearby_halal_logo);
 			holder.nearbyPlaceName = (TextView) v
 					.findViewById(R.id.txt_nearby_name);
 			holder.nearbyPlaceCategory = (TextView) v
@@ -70,15 +80,26 @@ public class NearbyListAdapter extends BaseAdapter implements
 		}
 
 		holder.nearbyPlaceName.setText(place.getName());
-		holder.nearbyPlaceCategory.setText(place.getCategory().getShortName());
+		holder.nearbyPlaceCategory.setText(place.getCategory().getShortName()
+				.toUpperCase(Locale.getDefault()));
 		holder.nearbyPlaceDistance.setText(place.getFormattedDistance());
 
 		if (place.getPhotos().size() > 0) {
 			String photoUrl = place.getPhotos().get(0).getUrl();
-			Helper.log("photo [" + position + "] url : " + photoUrl);
 			imgLoader.displayImage(photoUrl, holder.nearbyPlaceImg);
 		} else {
 			imgLoader.displayImage(null, holder.nearbyPlaceImg);
+		}
+
+		switch (place.getHalal().getType()) {
+		case Halal.GOVERNMENT:
+		case Halal.ISLAMIC:
+			String halalLogoUrl = "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTWXfzteQGyIdc_NIuLa9OoAmuzVWQ1iZhs-13ZosM-VM1l20IwWg";
+			imgLoader.displayImage(halalLogoUrl, holder.nearbyHalalBodiesLogo);
+			break;
+		default:
+			imgLoader.displayImage(null, holder.nearbyHalalBodiesLogo);
+			break;
 		}
 
 		return v;
@@ -86,6 +107,7 @@ public class NearbyListAdapter extends BaseAdapter implements
 
 	static class ViewHolder {
 		ImageView nearbyPlaceImg;
+		ImageView nearbyHalalBodiesLogo;
 		TextView nearbyPlaceName;
 		TextView nearbyPlaceCategory;
 		TextView nearbyPlaceDistance;
@@ -106,7 +128,17 @@ public class NearbyListAdapter extends BaseAdapter implements
 		intent.putExtra(Helper.KEY_PLACE_PHONE, place.getPhone());
 		intent.putExtra(Helper.KEY_PLACE_LAT, place.getLatitude());
 		intent.putExtra(Helper.KEY_PLACE_LNG, place.getLongitude());
+
+		String halalValue = place.getHalal().getDisplayValue();
+		Helper.log("halal val : "+halalValue);
+		if (place.getHalal().getBodies() != null) {
+			halalValue = place.getHalal().getBodies().getName();
+			intent.putExtra(HalalBodies.KEY_BODY_LOGOURL, place.getHalal().getBodies()
+					.getLogoUrl());
+		}
+		intent.putExtra(HalalBodies.KEY_BODY_NAME, halalValue);
 		
+
 		context.startActivity(intent);
 	}
 

@@ -6,8 +6,8 @@
 	</style>	
 	<!-- "Implementation" of our ABS custom theme -->
 	<style name="Widget.Styled.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
-		<item name="background">@color/light_grey</item>
-		<item name="android:background">@color/light_grey</item>
+		<item name="background">@android:color/white</item>
+		<item name="android:background">@android:color/white</item>
 		<item name="titleTextStyle">@style/HalalSpot.ActionBar.TitleTextStyle</item>
 		<item name="android:titleTextStyle">@style/HalalSpot.ActionBar.TitleTextStyle</item>
 		<item name="subtitleTextStyle">@style/HalalSpot.ActionBar.SubtitleTextStyle</item>

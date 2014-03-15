@@ -20,6 +20,7 @@ import com.sharee.halalspot.activities.PlaceDetailActivity;
 import com.sharee.halalspot.beans.Halal;
 import com.sharee.halalspot.beans.HalalBodies;
 import com.sharee.halalspot.beans.Place;
+import com.sharee.utilities.Api;
 import com.sharee.utilities.Helper;
 
 public class NearbyListAdapter extends BaseAdapter implements
@@ -94,7 +95,7 @@ public class NearbyListAdapter extends BaseAdapter implements
 		switch (place.getHalal().getType()) {
 		case Halal.GOVERNMENT:
 		case Halal.ISLAMIC:
-			String halalLogoUrl = "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTWXfzteQGyIdc_NIuLa9OoAmuzVWQ1iZhs-13ZosM-VM1l20IwWg";
+			String halalLogoUrl = Api.getHalalLogoUrl(place.getHalal().getBodies().getLogoUrl());
 			imgLoader.displayImage(halalLogoUrl, holder.nearbyHalalBodiesLogo);
 			break;
 		default:
@@ -129,16 +130,13 @@ public class NearbyListAdapter extends BaseAdapter implements
 		intent.putExtra(Helper.KEY_PLACE_LAT, place.getLatitude());
 		intent.putExtra(Helper.KEY_PLACE_LNG, place.getLongitude());
 
-		String halalValue = place.getHalal().getDisplayValue();
-		Helper.log("halal val : "+halalValue);
+		String bodiesName = place.getHalal().getDisplayValue();
 		if (place.getHalal().getBodies() != null) {
-			halalValue = place.getHalal().getBodies().getName();
+			bodiesName = place.getHalal().getBodies().getName();
 			intent.putExtra(HalalBodies.KEY_BODY_LOGOURL, place.getHalal().getBodies()
-					.getLogoUrl());
-		}
-		intent.putExtra(HalalBodies.KEY_BODY_NAME, halalValue);
-		
-
+					.getLogoUrl());			
+		}		
+		intent.putExtra(HalalBodies.KEY_BODY_NAME, bodiesName);
 		context.startActivity(intent);
 	}
 

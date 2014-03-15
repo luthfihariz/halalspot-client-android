@@ -17,5 +17,6 @@
     <string name="title_activity_full_map">Nearby</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="action_fail">Sorry, application fail to do the action.</string>
 
 </resources>

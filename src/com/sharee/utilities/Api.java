@@ -18,12 +18,14 @@ import org.json.JSONObject;
 
 public class Api {
 
-	private static String DOMAIN = "http://4f190343.ngrok.com";
+	private static String DOMAIN = "http://440c5918.ngrok.com";
 	private static String HOST_NAME = DOMAIN + "/sharee";
 	private static String HOST_NAME_API = HOST_NAME + "/api/v1";
 	private static String NEARBY_PLACES_URL = HOST_NAME_API + "/places/nearby";
 	private static String PLACES_URL = HOST_NAME_API + "/places";
 	private static String AUTOCOMPLETE_CITY_URL = "http://gd.geobytes.com/AutoCompleteCity";
+	private static String STATIC_URL = DOMAIN + "/static";
+	private static String HALAL_LOGO_URL = STATIC_URL + "/halal_logo";
 
 	public static JSONObject getNearbyPlaces(double latitude, double longitude,
 			int skip) throws IOException {
@@ -62,6 +64,10 @@ public class Api {
 		Map<String, String> params = new java.util.HashMap<String, String>();
 		params.put("q", keyword);
 		return Api.getHttpJsonArray(AUTOCOMPLETE_CITY_URL, getQueryString(params));
+	}
+	
+	public static String getHalalLogoUrl(String filename){
+		return Api.HALAL_LOGO_URL + "/" + filename;
 	}
 
 	private static String getQueryString(Map<String, String> params) {

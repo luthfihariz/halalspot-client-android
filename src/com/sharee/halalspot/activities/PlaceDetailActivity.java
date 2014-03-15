@@ -26,6 +26,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sharee.halalspot.R;
 import com.sharee.halalspot.adapters.PhotoPagerAdapter;
 import com.sharee.halalspot.beans.Halal;
@@ -33,6 +34,7 @@ import com.sharee.halalspot.beans.HalalBodies;
 import com.sharee.halalspot.beans.Photo;
 import com.sharee.halalspot.beans.Place;
 import com.sharee.halalspot.sync.GetPlaceDetailTask;
+import com.sharee.utilities.Api;
 import com.sharee.utilities.Helper;
 import com.sharee.utilities.OnAsyncTaskCompleted;
 
@@ -41,6 +43,7 @@ public class PlaceDetailActivity extends SherlockFragmentActivity {
 	private Intent intent;
 	private Button getDirectionBtn;
 	private ImageView halalLogo;
+	private ImageView halalBodiesArrow;
 	private TextView placeName;
 	private TextView placeCat;
 	private TextView placeAddr;
@@ -85,6 +88,7 @@ public class PlaceDetailActivity extends SherlockFragmentActivity {
 		placeWeb = (TextView) findViewById(R.id.txt_website);
 		placeCity = (TextView) findViewById(R.id.txt_city);
 		placeHalal = (TextView) findViewById(R.id.txt_halal_value);
+		halalBodiesArrow = (ImageView) findViewById(R.id.bodies_arrow);
 		photosPager = (ViewPager) findViewById(R.id.pager_place_photos);		
 		bodiesContainer = (RelativeLayout) findViewById(R.id.rl_halal_bodies);
 		webContainer = (RelativeLayout) findViewById(R.id.rl_website_container);
@@ -97,8 +101,8 @@ public class PlaceDetailActivity extends SherlockFragmentActivity {
 		actionBar.setTitle(intent.getStringExtra(Helper.KEY_PLACE_NAME));
 		actionBar.setSubtitle(intent.getStringExtra(Helper.KEY_PLACE_CATNAME));
 		
-		/*String halalLogoUrl = intent.getStringExtra(HalalBodies.KEY_BODY_LOGOURL);
-		ImageLoader.getInstance().displayImage(halalLogoUrl, halalLogo);*/
+		String halalLogoFilename = intent.getStringExtra(HalalBodies.KEY_BODY_LOGOURL);
+		ImageLoader.getInstance().displayImage(Api.getHalalLogoUrl(halalLogoFilename), halalLogo);
 		
 		placeName.setText(intent.getStringExtra(Helper.KEY_PLACE_NAME));
 		placeAddr.setText(intent.getStringExtra(Helper.KEY_PLACE_ADDR));
@@ -106,7 +110,7 @@ public class PlaceDetailActivity extends SherlockFragmentActivity {
 				.toUpperCase(Locale.getDefault()));
 		placeCity.setText(intent.getStringExtra(Helper.KEY_PLACE_CITY) + ", "
 				+ intent.getStringExtra(Helper.KEY_PLACE_COUNTRY));
-		/*placeHalal.setText(intent.getStringExtra(HalalBodies.KEY_BODY_NAME));*/
+		placeHalal.setText(intent.getStringExtra(HalalBodies.KEY_BODY_NAME));
 		
 		
 	}
@@ -195,10 +199,11 @@ public class PlaceDetailActivity extends SherlockFragmentActivity {
 			setCallListener(place.getPhone());
 		}
 						
-		setBodiesListener(place.getHalal());
+		if(place.getHalal().getBodies()!=null) setBodiesListener(place.getHalal());
 	}
 
 	private void setBodiesListener(final Halal halal) {
+		halalBodiesArrow.setVisibility(View.VISIBLE);
 		bodiesContainer.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -214,6 +219,7 @@ public class PlaceDetailActivity extends SherlockFragmentActivity {
 				intent.putExtra(HalalBodies.KEY_BODY_PHONE, halal.getBodies().getPhone());
 				intent.putExtra(HalalBodies.KEY_BODY_WEBSITE, halal.getBodies().getWebsite());
 				intent.putExtra(HalalBodies.KEY_BODY_EMAIL, halal.getBodies().getEmail());
+				intent.putExtra(HalalBodies.KEY_BODY_LOGOURL, halal.getBodies().getLogoUrl());
 				startActivity(intent);
 			}
 		});
@@ -226,10 +232,11 @@ public class PlaceDetailActivity extends SherlockFragmentActivity {
 			public void onClick(View v) {
 				try {
 					Intent callIntent = new Intent(Intent.ACTION_DIAL);
-					callIntent.setData(Uri.parse(phoneNumber));
+					callIntent.setData(Uri.parse("tel:"+phoneNumber));
 					startActivity(callIntent);
 				} catch (ActivityNotFoundException ex) {
 					Helper.log("err : "+ex.getMessage());
+					Helper.toastShort(PlaceDetailActivity.this, getString(R.string.action_fail));
 				}
 			}
 		});

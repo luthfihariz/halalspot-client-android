@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sv"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/rl_bodies_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp" >
+
+            <ImageView
+                android:id="@+id/img_bodies_halallogo"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/sample_halal_ins_logo" />
+
+            <TextView
+                android:id="@+id/txt_bodies_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/img_bodies_halallogo"
+                android:text="@string/sample_muis"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_bodies_addr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/txt_bodies_name"
+                android:layout_below="@+id/txt_bodies_name"
+                android:text="@string/sample_muis_addr" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_top_border"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lighter_grey" />
+
+        <RelativeLayout
+            android:id="@+id/rl_bodies_overview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp" >
+
+            <TextView
+                android:id="@+id/txt_bodies_overview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+        </RelativeLayout>
+        
+        
+        <RelativeLayout
+            android:id="@+id/rl_overview_border"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lighter_grey" />
+
+        <RelativeLayout
+            android:id="@+id/rl_bodies_website"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="7dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="7dp"
+            android:paddingTop="7dp"
+            android:visibility="visible" >
+
+            <ImageView
+                android:id="@+id/img_website_icon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_website" />
+
+            <TextView
+                android:id="@+id/txt_bodies_website"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/img_website_icon"
+                android:text=""
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_website_border"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lighter_grey"
+            android:visibility="visible" />
+
+        <RelativeLayout
+            android:id="@+id/rl_bodies_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="7dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="7dp"
+            android:paddingTop="7dp"
+            android:visibility="visible" >
+
+            <ImageView
+                android:id="@+id/img_phone_icon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_call" />
+
+            <TextView
+                android:id="@+id/txt_bodies_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/img_phone_icon"
+                android:text=""
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_call_border"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lighter_grey"
+            android:visibility="visible" />
+        
+        <RelativeLayout
+            android:id="@+id/rl_bodies_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="7dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="7dp"
+            android:paddingTop="7dp"
+            android:visibility="visible" >
+
+            <ImageView
+                android:id="@+id/img_email_icon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_email" />
+
+            <TextView
+                android:id="@+id/txt_bodies_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/img_email_icon"
+                android:text=""
+                android:textStyle="bold" />
+        </RelativeLayout>
+        
+    </LinearLayout>
+
+</ScrollView>

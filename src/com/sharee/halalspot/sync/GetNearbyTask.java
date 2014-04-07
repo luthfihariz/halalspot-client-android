@@ -137,7 +137,7 @@ public class GetNearbyTask extends AsyncTask<Double, Void, JSONObject> {
 				photos.add(photo);
 			}
 			place.setPhotos(photos);
-			places.add(place);
+			places.add(place);			
 		}
 
 		return places;

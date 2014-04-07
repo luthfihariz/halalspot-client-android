@@ -18,7 +18,7 @@ import org.json.JSONObject;
 
 public class Api {
 
-	private static String DOMAIN = "http://440c5918.ngrok.com";
+	private static String DOMAIN = "http://polar-shore-2598.herokuapp.com/";
 	private static String HOST_NAME = DOMAIN + "/sharee";
 	private static String HOST_NAME_API = HOST_NAME + "/api/v1";
 	private static String NEARBY_PLACES_URL = HOST_NAME_API + "/places/nearby";
@@ -30,22 +30,22 @@ public class Api {
 	public static JSONObject getNearbyPlaces(double latitude, double longitude,
 			int skip) throws IOException {
 		Map<String, String> params = new java.util.HashMap<String, String>();
-		params.put("lng", "103.76483917236328"); // debug mode
-		params.put("lat", "1.314939447746537"); // debug mode
+		/*
+		 * params.put("lng", "103.76483917236328"); // debug mode
+		 * params.put("lat", "1.314939447746537"); // debug mode
+		 */
 		params.put("limit", String.valueOf(10 + skip));
 		params.put("skip", String.valueOf(skip));
-
-		/*
-		 * params.put("lng", String.valueOf(longitude)); params.put("lat",
-		 * String.valueOf(latitude));
-		 */
+		params.put("lng", String.valueOf(longitude));
+		params.put("lat", String.valueOf(latitude));
 
 		return Api.getHttp(NEARBY_PLACES_URL, getQueryString(params));
 	}
-	
-	public static JSONObject getNearbyPlaces(int skip, String city) throws IOException {
+
+	public static JSONObject getNearbyPlaces(int skip, String city)
+			throws IOException {
 		Map<String, String> params = new java.util.HashMap<String, String>();
-		
+
 		params.put("limit", String.valueOf(30 + skip));
 		params.put("skip", String.valueOf(skip));
 		params.put("city", city);
@@ -59,14 +59,14 @@ public class Api {
 		return Api.getHttp(PLACES_URL + "/" + placesId, null);
 	}
 
-	public static JSONArray autoCompleteCity(String keyword)
-			throws IOException {
+	public static JSONArray autoCompleteCity(String keyword) throws IOException {
 		Map<String, String> params = new java.util.HashMap<String, String>();
 		params.put("q", keyword);
-		return Api.getHttpJsonArray(AUTOCOMPLETE_CITY_URL, getQueryString(params));
+		return Api.getHttpJsonArray(AUTOCOMPLETE_CITY_URL,
+				getQueryString(params));
 	}
-	
-	public static String getHalalLogoUrl(String filename){
+
+	public static String getHalalLogoUrl(String filename) {
 		return Api.HALAL_LOGO_URL + "/" + filename;
 	}
 

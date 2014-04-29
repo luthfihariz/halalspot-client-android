@@ -18,14 +18,14 @@ import org.json.JSONObject;
 
 public class Api {
 
-	private static String DOMAIN = "http://polar-shore-2598.herokuapp.com/";
+	private static String DOMAIN = "http://polar-shore-2598.herokuapp.com";
 	private static String HOST_NAME = DOMAIN + "/sharee";
 	private static String HOST_NAME_API = HOST_NAME + "/api/v1";
 	private static String NEARBY_PLACES_URL = HOST_NAME_API + "/places/nearby";
 	private static String PLACES_URL = HOST_NAME_API + "/places";
 	private static String AUTOCOMPLETE_CITY_URL = "http://gd.geobytes.com/AutoCompleteCity";
-	private static String STATIC_URL = DOMAIN + "/static";
-	private static String HALAL_LOGO_URL = STATIC_URL + "/halal_logo";
+	private static String STATIC_URL = "http://getsharee.com/dbhs/static";
+	private static String HALAL_LOGO_URL = STATIC_URL;
 
 	public static JSONObject getNearbyPlaces(double latitude, double longitude,
 			int skip) throws IOException {

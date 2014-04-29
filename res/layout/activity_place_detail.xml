@@ -13,10 +13,9 @@
             android:id="@+id/pager_place_photos"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:background="@drawable/placeholder"
             android:contentDescription="@string/app_name"
             android:scaleType="centerCrop"
-            android:src="@drawable/sample_places_img" />
+            />
 
         <RelativeLayout
             android:id="@+id/rl_halal_bodies"

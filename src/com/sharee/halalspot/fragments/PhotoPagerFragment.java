@@ -35,7 +35,7 @@ public class PhotoPagerFragment extends Fragment {
 		android.view.ViewGroup.LayoutParams params = new LayoutParams(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT);
-		photoView.setLayoutParams(params);
+		photoView.setLayoutParams(params);				
 		photoView.setScaleType(ScaleType.CENTER_CROP);
 		photoView.setImageResource(R.drawable.placeholder);
 		
